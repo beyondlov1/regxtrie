@@ -234,7 +234,7 @@ fn regexlize(root:&TrieNode)-> Vec<String>{
     let vs:Vec<Vec<String>> = collect(root, Vec::new());
     let mut result = Vec::new();
     for v in vs{
-        result.push(String::from_iter(v));
+        result.push(format!("{}{}{}","^",String::from_iter(v),"$"));
     }
     result
 }
@@ -279,6 +279,20 @@ mod tests {
     }
 
     #[test]
+    fn testcreate2() {
+        let mut root:TrieNode = TrieNode::newc(String::from(""));
+        let v = vec!["22", "33","444","222","2222","222","222","Acc","DGG","DGGB"];
+        for word in &v{
+            root.insert(word);
+        }
+        root.prune(10);
+        root.merge();
+        println!("{}",TrieNode::tojson(&root).unwrap());
+        // println!("{:?}",collect(&root, Vec::new()));
+        println!("{:?}",regexlize(&root));
+    }
+
+    #[test]
     fn rmatch(){
         let mut root:TrieNode = TrieNode::newc(String::from(""));
         // let v = vec!["abc", "a8bd我","accc","adddd","abcc","abcd","abcg","Acc","DGG","DGGB"];
@@ -293,8 +307,8 @@ mod tests {
 
         println!("{}", TrieNode::tojson(&root).unwrap());
 
-        // println!("{:?}",regexlize(&root));
-        // println!("{}",ismatch(&root, "23358858554454"));
+        println!("{:?}",regexlize(&root));
+        println!("{}",ismatch(&root, "233598945"));
 
         // println!("{:?}", TrieNode::fromjson(&TrieNode::tojson(&root).unwrap()).unwrap());
         
